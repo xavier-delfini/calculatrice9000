@@ -1,35 +1,42 @@
 from tkinter import *
 from tkinter import ttk
 
-def addition():
+
+"""def addition():
     value1 = float(num1.get())
     value2 = float(num2.get())
-    resultat.set(float(value1 + value2))
+    result.set(float(value1 + value2))
+"""
 
 calc = Tk()
-calc.title("Calculatrice") # Titre de notre fenêtre
+calc.title("Calculatrice")
 
-mainframe = ttk.Frame(calc, padding="4 4 12 12")
-mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+# Parent et cadre principal de notre interface
+affichage = ttk.Frame(calc, padding="10 10 5 5")
+affichage.grid(column=0, row=0, sticky=(W, E, S))
 calc.columnconfigure(0, weight=1)
 calc.rowconfigure(0, weight=1)
 
-#Zone d'entrée de texte 1
-num1 = StringVar()
-feet_entry = ttk.Entry(mainframe, width=7,textvariable=num1)  # Zone d'entrée de text qui prendre la valeur entrée et qui la met dans la variable feet
-feet_entry.grid(column=2, row=1, sticky=(W, E))
-
-ttk.Label(mainframe, text="+").grid(column=3, row=1, sticky=W)
-
-num2 = StringVar()
-feet_entry = ttk.Entry(mainframe, width=7,textvariable=num2)  # Zone d'entrée de text qui prendre la valeur entrée et qui la met dans la variable feet
-feet_entry.grid(column=4, row=1, sticky=(W, E))
-
-
-ttk.Label(mainframe, text="=").grid(column=2, row=2, sticky=W)
-
-
-resultat = StringVar()
-ttk.Label(mainframe, textvariable=resultat).grid(column=2, row=3, sticky=(W, E))
-ttk.Button(mainframe, text="Calculer", command=addition).grid(column=3, row=3, sticky=W)
+boutons = ttk.Frame(calc, padding="1 1 1 1")
+boutons.grid(column=0, row=1, sticky=(W, E, S))
+calc.columnconfigure(0, weight=1)
+calc.rowconfigure(0, weight=1)
+value = 12
+ttk.Label(affichage,text=value).grid(column=0, row=0)
+ttk.Button(boutons, text="7").grid(column=0, row=0)
+ttk.Button(boutons, text="8").grid(column=1, row=0)
+ttk.Button(boutons, text="9").grid(column=2, row=0)
+ttk.Button(boutons, text="÷").grid(column=3, row=0)
+ttk.Button(boutons, text="6").grid(column=0, row=1)
+ttk.Button(boutons, text="5").grid(column=1, row=1)
+ttk.Button(boutons, text="4").grid(column=2, row=1)
+ttk.Button(boutons, text="X").grid(column=3, row=1)
+ttk.Button(boutons, text="3").grid(column=0, row=2)
+ttk.Button(boutons, text="2").grid(column=1, row=2)
+ttk.Button(boutons, text="1").grid(column=2, row=2)
+ttk.Button(boutons, text="-").grid(column=3, row=2)
+ttk.Button(boutons, text="+/-").grid(column=0, row=3)
+ttk.Button(boutons, text="0").grid(column=1, row=3)
+ttk.Button(boutons, text=",").grid(column=2, row=3)
+ttk.Button(boutons, text="+").grid(column=3, row=3)
 calc.mainloop()
