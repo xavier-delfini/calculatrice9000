@@ -8,7 +8,7 @@ def input_process(enter):
         input_process.expression
         input_process.result
         input_process.count
-        input_process.modulo
+        input_process.sign
 
     except Exception:
         input_process.storage=[]
@@ -16,14 +16,14 @@ def input_process(enter):
         input_process.expression=""
         input_process.result=0
         input_process.count=0
-        input_process.modulo="+"
+        input_process.sign="+"
     if isinstance(enter, int) or enter == "," or enter == "+/-":
         enter=str(enter)
         if enter == ",": enter = "."
         if enter == "+/-":
-            if input_process.modulo == "+": modulo.set("-")
+            if input_process.sign == "+": sign.set("-")
             else:
-                modulo.set("")
+                sign.set("")
         else:
             input_process.number = input_process.number + enter
             input_process.expression = input_process.expression + enter
@@ -34,9 +34,7 @@ def input_process(enter):
     elif isinstance(enter, str):
         #Stockage du nombre dans la liste storage
         input_process.number=int(input_process.number)
-        test=modulo.get
-        print(test)
-        if modulo.get =="-":
+        if sign.get =="-":
             input_process.number=input_process.number * -1
         input_process.storage.append(input_process.number)
         input_process.number=""
@@ -45,7 +43,13 @@ def input_process(enter):
         input_process.expression= input_process.expression + enter
         print (input_process.expression)
         value.set(input_process.expression)
+def sign_number(number,sign_selected):
+    number = int(number)
+    if sign_selected == "-":
+        number = number * -1
+    return number
 
+#def egal(array):
 
 calc = Tk()
 calc.title("Calculatrice")
@@ -62,9 +66,9 @@ boutons.grid(column=0, row=1, sticky=(W, E, S))
 calc.columnconfigure(0, weight=1)
 calc.rowconfigure(0, weight=1)
 value = StringVar()
-modulo = StringVar()
+sign = StringVar()
 
-ttk.Label(affichage, textvariable=modulo).grid(column=0, row=0)
+ttk.Label(affichage, textvariable=sign).grid(column=0, row=0)
 ttk.Label(affichage, textvariable=value).grid(column=1, row=0)
 ttk.Button(boutons, text="7", command=lambda: input_process(7)).grid(column=0, row=0)
 ttk.Button(boutons, text="8", command=lambda: input_process(8)).grid(column=1, row=0)
