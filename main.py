@@ -3,6 +3,69 @@ from tkinter import ttk
 
 
 def input_process(enter):
+    #input_insert(input_)
+    def insert_number():
+        dumper = input_process.number
+        try:
+            input_process.number = int(input_process.number)
+        except Exception:
+            input_process.number = float(input_process.number)
+
+        if input_process.sign == "-":
+            negative = str(input_process.number)
+            # Si le nombre est le premier alors celui ci ne prendra pas de parentèses
+            if input_process.expression != "":
+                negative = "(-" + negative + ")"
+            else:
+                negative = "-" + negative
+            input_process.number = input_process.number * -1
+            print(input_process.expression)
+            input_process.expression = input_process.expression + negative + enter
+            input_process.sign = "+"
+        else:
+
+            input_process.expression = input_process.expression + dumper + enter
+        value.set(input_process.expression)
+        input_process.storage.append(input_process.number)
+
+    def egal(operation):
+        def add_sou(operator):
+            if operator =="+":
+                result=operation[0] + operation[2]
+            else:
+                result = operation[0] - operation[2]
+            del operation[0:2]
+            operation[0]=result
+            print(operation)
+        insert_number()
+        i=0
+
+        while len(operation)>=2:
+
+            match operation[i]:
+                case "+":
+                    add_sou("+")
+                    i-=1
+                case "-":
+                    add_sou("-")
+                    i-=1
+                case "X":
+                    multiply()
+                    i-=1
+                case "/":
+                     divide()
+                     i-=1
+                case "=":
+                    del operation[1]
+                    break
+                case _:
+                    pass
+            i+=1
+        print (operation[0])
+        return operation[0]
+
+
+
     try:
         input_process.storage
 
@@ -30,8 +93,8 @@ def input_process(enter):
 
     # Si l'entrée est "="
     elif enter == "=":
-        pass
 
+        current_number.set(egal(input_process.storage))
     # Si l'entrée est "CE"
     elif enter == "CE":
         input_process.expression = ""
@@ -40,66 +103,47 @@ def input_process(enter):
         current_number.set(input_process.number)
         input_process.storage = []
 
-    # Si l'entrée est une chaine de caractère autre que testé précédemment, ces entrée correspondent a un opérateur
+    # Si l'entrée est une chaine de caractère autre que testé précédemment, cet entrée correspont a un opérateur
     elif isinstance(enter, str):
         #Le nombre entrer est complet nous pouvont donc le convertir en int ou en float si le int retourne une erreur a cause de la virgule
-        dumper=input_process.number
-        try:
-            input_process.number = int(input_process.number)
-        except Exception:
-            input_process.number = float(input_process.number)
-
-        if input_process.sign == "-" :
-            negative = str(input_process.number)
-            #Si le nombre est le premier alors celui ci ne prendra pas de parentèses
-            if input_process.expression !="": negative = "(-"+negative+")"
-            else: negative = "-"+negative
-            input_process.number = input_process.number * -1
-            print(input_process.expression)
-            input_process.expression = input_process.expression + negative + enter
-            input_process.sign = "+"
-        else:
-
-            input_process.expression = input_process.expression+ dumper + enter
-
-        input_process.storage.append(input_process.number)
+        insert_number()
         sign.set("")
-
-        input_process.number = ""
         current_number.set(input_process.number)
+        input_process.number = ""
+
         input_process.storage.append(enter)
-        print(input_process.storage)
-        print(input_process.expression)
-        value.set(input_process.expression)
+
         print(value.get())
 
-def egal(operation):
-    calculs=True
-    while calculs=True:
 
+
+
+#Déclaration de notre cadre parent permettant l'affichage des cadres enfants
 calc = Tk()
 calc.title("Calculatrice")
+calc.resizable(False, False)
+# Création des trois cadres enfants utilisés dans notre calculatrice
 
-# Création des trois cadres utilisés dans notre calculatrice
-
-# Cadre display permettant l'affichage de l'opération
+# Affichage de l'operation et du nombre actuellement entrée
 display = ttk.Frame(calc, padding="10 10 5 5")
 display.grid(column=0, row=0, sticky=("N", "E"))
 display.columnconfigure(0, weight=1)
 display.rowconfigure(0, weight=1)
 
-
-
+# Affichage des boutons
 boutons = ttk.Frame(calc, padding="1 1 1 1")
 boutons.grid(column=0, row=1, sticky=(W, E, S))
-calc.columnconfigure(0, weight=1)
-calc.rowconfigure(0, weight=1)
+boutons.columnconfigure(0, weight=1)
+boutons.rowconfigure(0, weight=1)
+#Déclaration de variable utile a l'affichage
 value = StringVar()
 sign = StringVar()
 current_number = StringVar()
+#Déclaration de zones de texte pour l'affichage
 ttk.Label(display, textvariable=sign).grid(column=0, row=1)
 ttk.Label(display, textvariable=value,font=12).grid(column=0, row=0)
 ttk.Label(display, textvariable=current_number).grid(column=1, row=1)
+#Déclaration des boutons
 ttk.Button(boutons, text="7", command=lambda: input_process(7)).grid(column=0, row=0)
 ttk.Button(boutons, text="8", command=lambda: input_process(8)).grid(column=1, row=0)
 ttk.Button(boutons, text="9", command=lambda: input_process(9)).grid(column=2, row=0)
