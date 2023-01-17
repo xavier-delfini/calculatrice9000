@@ -195,6 +195,6 @@ ttk.Button(boutons, text=",", command=lambda: input_process(",")).grid(column=2,
 ttk.Button(boutons, text="+", command=lambda: input_process("+")).grid(column=3, row=3)
 ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=4, row=4)
 ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=4, row=0)
-ttk.Button(boutons, text="", command=lambda: input_process("CE")).grid(column=4, row=0)
+
 
 calc.mainloop()
