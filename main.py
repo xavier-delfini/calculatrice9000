@@ -3,23 +3,27 @@ from tkinter import ttk
 
 
 def input_process(enter):
-
     def insert_number():
+        # Stockage temporaire
         dumper = input_process.number
+        # Si nombre entré int sinon nombre float
         try:
             input_process.number = int(input_process.number)
-        except Exception:
+        except ValueError:
             input_process.number = float(input_process.number)
-
+        # Si nombre négatif
         if input_process.sign == "-":
+            # Convertion du nombre en str pour la variable expression
             negative = str(input_process.number)
-            # Si le nombre est le premier alors celui ci ne prendra pas de parentèses
+            # Si ce n'est pas le premier nombre de l'opération alors parenthèses
             if input_process.expression != "":
                 negative = "(-" + negative + ")"
+            # Si le nombre est le premier alors celui ci ne prendra pas de parentèses
             else:
                 negative = "-" + negative
+            # On fait passer le nombre qui est encore en int ou float en nombre négatif
             input_process.number = input_process.number * -1
-            print(input_process.expression)
+            # On ajoute aussi
             input_process.expression = input_process.expression + negative + enter
             input_process.sign = "+"
         else:
@@ -35,7 +39,6 @@ def input_process(enter):
                 result = operation[0] - operation[2]
             del operation[0:2]
             operation[0]=result
-            print(operation)
         def multi_div(op,location):
             if op == "X":
                 result = operation[location - 1] * operation[location + 1]
@@ -46,16 +49,15 @@ def input_process(enter):
                     return 1
 
             operation[location - 1] = result
-            print (operation)
+
             del operation[location:location+2]
-            print(operation)
+
 
 
 
         insert_number()
         i=0
-        lenth = len(operation)
-        while (lenth >= 2) and (i<lenth):
+        while (len(operation) >= 2) and (i<len(operation)):
             match operation[i]:
                 case "X":
                     multi_div("X",i)
@@ -66,9 +68,8 @@ def input_process(enter):
                         return "zero"
                     i = 0
             i+=1
-            print(i)
             lenth=len(operation)
-            print (lenth)
+
         i=0
         while len(operation) >= 2:
 
@@ -80,16 +81,20 @@ def input_process(enter):
                 case "=":
                     del operation[1]
                     break
-
         e=1
         return operation[0]
+    def history(expression):
+        expression=expression+"\n"
+        f = open("history.txt", "a")
+        f.write(expression)
+        f.close
 
 
 
     try:
         input_process.storage
 
-    except Exception:
+    except AttributeError:
         input_process.storage = []
         input_process.number = ""
         input_process.expression = ""
@@ -117,7 +122,6 @@ def input_process(enter):
         result=egal(input_process.storage)
         if result=="zero":
             input_process.expression = "div zero, redémarrage"
-
             input_process.number = ""
             value.set(input_process.expression)
             current_number.set(input_process.number)
@@ -129,7 +133,16 @@ def input_process(enter):
 
 
         else:
+            result_complete=input_process.expression+str(result)
+            history(result_complete)
+
             current_number.set(result)
+            input_process.expression =""
+            input_process.number = result
+            input_process.storage = []
+            input_process.expression=str(input_process.expression)
+            input_process.number = str(input_process.number)
+
     # Si l'entrée est "CE"
     elif enter == "CE":
         input_process.expression = ""
