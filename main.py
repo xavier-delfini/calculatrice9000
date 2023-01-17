@@ -62,7 +62,8 @@ def input_process(enter):
                     i =0
                 case "/":
                     if multi_div("/",i)==1:
-                        break
+                        d0=1
+                        return "zero"
                     i = 0
             i+=1
             print(i)
@@ -113,8 +114,22 @@ def input_process(enter):
 
     # Si l'entrée est "="
     elif enter == "=":
+        result=egal(input_process.storage)
+        if result=="zero":
+            input_process.expression = "div zero, redémarrage"
 
-        current_number.set(egal(input_process.storage))
+            input_process.number = ""
+            value.set(input_process.expression)
+            current_number.set(input_process.number)
+            input_process.storage = []
+            import time
+            time.sleep(5)
+            input_process.expression=""
+            current_number.set(input_process.number)
+
+
+        else:
+            current_number.set(result)
     # Si l'entrée est "CE"
     elif enter == "CE":
         input_process.expression = ""
@@ -180,5 +195,6 @@ ttk.Button(boutons, text=",", command=lambda: input_process(",")).grid(column=2,
 ttk.Button(boutons, text="+", command=lambda: input_process("+")).grid(column=3, row=3)
 ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=4, row=4)
 ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=4, row=0)
+ttk.Button(boutons, text="", command=lambda: input_process("CE")).grid(column=4, row=0)
 
 calc.mainloop()
