@@ -202,19 +202,16 @@ calc.columnconfigure(0, weight=1)
 calc.rowconfigure(0, weight=1)
 # Affichage de l'operation et du nombre actuellement entrée
 display = ttk.Frame(calc, borderwidth=5, relief="ridge", padding="10 10 5 5")
-display.grid(column=0, row=0, sticky=("N", "E" ,"W"))
+display.grid(column=0, row=0 ,sticky=("N", "E","W"))
 display.columnconfigure(0, weight=1)
 display.rowconfigure(0, weight=1)
 
 # Affichage des boutons
-boutons = ttk.Frame(calc, padding="1 1 1 1")
-boutons.grid(column=0, row=1, sticky=("W","E", ))
-boutons.columnconfigure(0, weight=1)
-boutons.rowconfigure(0, weight=1)
+boutons = ttk.Frame(calc, padding="5")
+boutons.grid(column=0, row=1, )
 
-histo = ttk.Frame(main, padding="1 1 1 1")
-histo.grid(column=1, row=0, sticky=("E","N"))
-histo["padding"]=20
+histo = ttk.Frame(main, padding="20")
+histo.grid(column=1, row=0, sticky=("N"))
 # Déclaration de variable utile a l'affichage
 value = StringVar()
 sign = StringVar()
@@ -246,9 +243,10 @@ ttk.Button(boutons, text="√", command=lambda: input_process("√")).grid(colum
 ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=0, row=6)
 ttk.Button(boutons, text="C", command=lambda: input_process("C")).grid(column=1, row=6)
 ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=2, row=6)
-
-ttk.Label(histo, text="Historique:", font=12).grid(column=0, row=0)
-ttk.Label(histo, textvariable=historique, font=12).grid(column=0, row=1)
+#Affichage historique
+ttk.Label(histo, text="Historique:", font=8).grid(column=0, row=0)
+ttk.Label(histo, textvariable=historique, font=8).grid(column=0, row=1)
 ttk.Button(histo, text="Reset", command=lambda: input_process("H")).grid(column=0, row=2)
 
+#Lancement du programme
 main.mainloop()
