@@ -98,11 +98,7 @@ def input_process(enter):
                     break
         return operation[0]
 
-    def history(expression):
-        expression = expression + "\n"
-        f = open( "history.txt" , "a",encoding="utf-8")
-        f.write(expression)
-        f.close
+
 
     try:
         input_process.storage
@@ -111,9 +107,8 @@ def input_process(enter):
         input_process.storage = []
         input_process.number = ""
         input_process.expression = ""
-        input_process.result = 0
-        input_process.count = 0
         input_process.sign = "+"
+
         # Si l'entrée est un nombre
     if isinstance(enter, int) or enter == "," or enter == "+/-":
         enter = str(enter)
@@ -143,8 +138,8 @@ def input_process(enter):
 
 
         else:
-            result_complete = input_process.expression + str(result)
-            history(result_complete)
+            historique.set(historique.get() +input_process.expression + str(result) + "\n")
+
 
             current_number.set(result)
             input_process.expression = ""
@@ -161,7 +156,9 @@ def input_process(enter):
         value.set(input_process.expression)
         current_number.set(input_process.number)
         input_process.storage = []
-
+    elif enter =="H":
+        historique.set("")
+        return 0
     elif enter == "C":
         input_process.number = ""
         current_number.set(input_process.number)
@@ -195,29 +192,37 @@ def input_process(enter):
 
 
 # Déclaration de notre cadre parent permettant l'affichage des cadres enfants
-calc = Tk()
-calc.title("Calculatrice")
-calc.resizable(False, False)
+main = Tk()
+main.title("Calculatrice")
+main.resizable(False, False)
 # Création des trois cadres enfants utilisés dans notre calculatrice
-
+calc = ttk.Frame(main, borderwidth=2, relief="ridge", padding="10 10 5 5")
+calc.grid(column=0, row=0, sticky=("N","S","W"))
+calc.columnconfigure(0, weight=1)
+calc.rowconfigure(0, weight=1)
 # Affichage de l'operation et du nombre actuellement entrée
-display = ttk.Frame(calc, padding="10 10 5 5")
-display.grid(column=0, row=0, sticky=("N", "E"))
+display = ttk.Frame(calc, borderwidth=5, relief="ridge", padding="10 10 5 5")
+display.grid(column=0, row=0, sticky=("N", "E" ,"W"))
 display.columnconfigure(0, weight=1)
 display.rowconfigure(0, weight=1)
 
 # Affichage des boutons
 boutons = ttk.Frame(calc, padding="1 1 1 1")
-boutons.grid(column=0, row=1, sticky=("W","E", "S"))
+boutons.grid(column=0, row=1, sticky=("W","E", ))
 boutons.columnconfigure(0, weight=1)
 boutons.rowconfigure(0, weight=1)
+
+histo = ttk.Frame(main, padding="1 1 1 1")
+histo.grid(column=1, row=0, sticky=("E","N"))
+histo["padding"]=20
 # Déclaration de variable utile a l'affichage
 value = StringVar()
 sign = StringVar()
 current_number = StringVar()
+historique=StringVar()
 # Déclaration de zones de texte pour l'affichage
 ttk.Label(display, textvariable=sign).grid(column=0, row=1)
-ttk.Label(display, textvariable=value, font=12).grid(column=0, row=0)
+ttk.Label(display, textvariable=value).grid(column=0, row=0)
 ttk.Label(display, textvariable=current_number).grid(column=1, row=1)
 # Déclaration des boutons
 ttk.Button(boutons, text="7", command=lambda: input_process(7)).grid(column=0, row=0)
@@ -242,5 +247,8 @@ ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=
 ttk.Button(boutons, text="C", command=lambda: input_process("C")).grid(column=1, row=6)
 ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=2, row=6)
 
+ttk.Label(histo, text="Historique:", font=12).grid(column=0, row=0)
+ttk.Label(histo, textvariable=historique, font=12).grid(column=0, row=1)
+ttk.Button(histo, text="Reset", command=lambda: input_process("H")).grid(column=0, row=2)
 
-calc.mainloop()
+main.mainloop()
