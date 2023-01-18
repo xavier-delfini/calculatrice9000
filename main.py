@@ -163,6 +163,9 @@ def input_process(enter):
         current_number.set(input_process.number)
         input_process.storage = []
 
+    elif enter == "C":
+        input_process.number = ""
+        current_number.set(input_process.number)
     # Si l'entrée est une chaine de caractère autre que testé précédemment, cet entrée correspont a un opérateur
 
     elif isinstance(enter, str):
@@ -223,22 +226,24 @@ ttk.Label(display, textvariable=current_number).grid(column=1, row=1)
 ttk.Button(boutons, text="7", command=lambda: input_process(7)).grid(column=0, row=0)
 ttk.Button(boutons, text="8", command=lambda: input_process(8)).grid(column=1, row=0)
 ttk.Button(boutons, text="9", command=lambda: input_process(9)).grid(column=2, row=0)
-ttk.Button(boutons, text="÷", command=lambda: input_process("/")).grid(column=3, row=0)
 ttk.Button(boutons, text="6", command=lambda: input_process(6)).grid(column=0, row=1)
 ttk.Button(boutons, text="5", command=lambda: input_process(5)).grid(column=1, row=1)
 ttk.Button(boutons, text="4", command=lambda: input_process(4)).grid(column=2, row=1)
-ttk.Button(boutons, text="X", command=lambda: input_process("X")).grid(column=3, row=1)
 ttk.Button(boutons, text="3", command=lambda: input_process(3)).grid(column=0, row=2)
 ttk.Button(boutons, text="2", command=lambda: input_process(2)).grid(column=1, row=2)
 ttk.Button(boutons, text="1", command=lambda: input_process(1)).grid(column=2, row=2)
-ttk.Button(boutons, text="-", command=lambda: input_process("-")).grid(column=3, row=2)
 ttk.Button(boutons, text="+/-", command=lambda: input_process("+/-")).grid(column=0, row=3)
 ttk.Button(boutons, text="0", command=lambda: input_process(0)).grid(column=1, row=3)
 ttk.Button(boutons, text=",", command=lambda: input_process(",")).grid(column=2, row=3)
-ttk.Button(boutons, text="+", command=lambda: input_process("+")).grid(column=3, row=3)
-ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=4, row=4)
-ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=4, row=0)
-ttk.Button(boutons, text="√", command=lambda: input_process("√")).grid(column=4, row=1)
-ttk.Button(boutons, text="%", command=lambda: input_process("%")).grid(column=4, row=3)
+ttk.Button(boutons, text="+", command=lambda: input_process("+")).grid(column=0, row=4)
+ttk.Button(boutons, text="-", command=lambda: input_process("-")).grid(column=1, row=4)
+ttk.Button(boutons, text="%", command=lambda: input_process("%")).grid(column=2, row=4)
+ttk.Button(boutons, text="X", command=lambda: input_process("X")).grid(column=0, row=5)
+ttk.Button(boutons, text="÷", command=lambda: input_process("/")).grid(column=1, row=5)
+ttk.Button(boutons, text="√", command=lambda: input_process("√")).grid(column=2, row=5)
+ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=0, row=6)
+ttk.Button(boutons, text="C", command=lambda: input_process("C")).grid(column=1, row=6)
+ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=2, row=6)
+
 
 calc.mainloop()
