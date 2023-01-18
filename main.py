@@ -5,6 +5,7 @@ from tkinter import ttk
 def input_process(enter):
     def insert_number():
         # Stockage temporaire
+
         dumper = input_process.number
         # Si nombre entré int sinon nombre float
         try:
@@ -31,46 +32,60 @@ def input_process(enter):
             input_process.expression = input_process.expression + dumper + enter
         value.set(input_process.expression)
         input_process.storage.append(input_process.number)
+
     def egal(operation):
         def add_sou(operator):
-            if operator =="+":
-                result=operation[0] + operation[2]
+            if operator == "+":
+                result = operation[0] + operation[2]
             else:
                 result = operation[0] - operation[2]
             del operation[0:2]
-            operation[0]=result
-        def multi_div(op,location):
+            operation[0] = result
+
+        def multi_div_square_percent(op, location):
             if op == "X":
                 result = operation[location - 1] * operation[location + 1]
-            else:
+            elif op == "/":
                 try:
                     result = operation[location - 1] / operation[location + 1]
+                # Si l'operation est une division par 0 on arrète le programme pour afficher un code erreur
                 except ZeroDivisionError:
                     return 1
-
+            elif op == "%":
+                result=operation[location -1] * operation[location + 1] / 100.0
+            #Racine carré
+            else:
+                operation[location] = operation[location + 1] ** (1 / 2)
+                del operation[location + 1]
+                return 0
             operation[location - 1] = result
-
-            del operation[location:location+2]
-
-
-
+            del operation[location:location + 2]
 
         insert_number()
-        i=0
-        while (len(operation) >= 2) and (i<len(operation)):
+        i = 0
+        while (len(operation) >= 2) and (i < len(operation)):
+            if operation[i] == "√":
+                multi_div_square_percent("√", i)
+                i = 0
+            i += 1
+
+        i = 0
+        while (len(operation) >= 2) and (i < len(operation)):
             match operation[i]:
                 case "X":
-                    multi_div("X",i)
-                    i =0
+                    multi_div_square_percent("X", i)
+                    i = 0
                 case "/":
-                    if multi_div("/",i)==1:
-                        d0=1
+                    if multi_div_square_percent("/", i) == 1:
                         return "zero"
                     i = 0
-            i+=1
-            lenth=len(operation)
+                case "%":
+                    multi_div_square_percent("%",i)
+                    i =0
+            i += 1
+            lenth = len(operation)
 
-        i=0
+        i = 0
         while len(operation) >= 2:
 
             match operation[1]:
@@ -81,15 +96,13 @@ def input_process(enter):
                 case "=":
                     del operation[1]
                     break
-        e=1
         return operation[0]
+
     def history(expression):
-        expression=expression+"\n"
-        f = open("history.txt", "a")
+        expression = expression + "\n"
+        f = open( "history.txt" , "a",encoding="utf-8")
         f.write(expression)
         f.close
-
-
 
     try:
         input_process.storage
@@ -101,8 +114,7 @@ def input_process(enter):
         input_process.result = 0
         input_process.count = 0
         input_process.sign = "+"
-        e=1
-        #Si l'entrée est un nombre
+        # Si l'entrée est un nombre
     if isinstance(enter, int) or enter == "," or enter == "+/-":
         enter = str(enter)
         if enter == ",": enter = "."
@@ -119,32 +131,32 @@ def input_process(enter):
 
     # Si l'entrée est "="
     elif enter == "=":
-        result=egal(input_process.storage)
-        if result=="zero":
+        result = egal(input_process.storage)
+        if result == "zero":
             input_process.expression = "div zero, redémarrage"
             input_process.number = ""
             value.set(input_process.expression)
             current_number.set(input_process.number)
             input_process.storage = []
-            import time
-            time.sleep(5)
-            input_process.expression=""
+            input_process.expression = ""
             current_number.set(input_process.number)
 
 
         else:
-            result_complete=input_process.expression+str(result)
+            result_complete = input_process.expression + str(result)
             history(result_complete)
 
             current_number.set(result)
-            input_process.expression =""
+            input_process.expression = ""
             input_process.number = result
             input_process.storage = []
-            input_process.expression=str(input_process.expression)
+            print(input_process.storage)
             input_process.number = str(input_process.number)
 
     # Si l'entrée est "CE"
     elif enter == "CE":
+        # Remise à 0 de la variable expression,number et storage et définition des variable d'affichage
+        # pour que celle ci prennent la valeur de ces variables
         input_process.expression = ""
         input_process.number = ""
         value.set(input_process.expression)
@@ -152,19 +164,37 @@ def input_process(enter):
         input_process.storage = []
 
     # Si l'entrée est une chaine de caractère autre que testé précédemment, cet entrée correspont a un opérateur
+
     elif isinstance(enter, str):
-        #Le nombre entrer est complet nous pouvont donc le convertir en int ou en float si le int retourne une erreur a cause de la virgule
-        insert_number()
-        sign.set("")
-        current_number.set(input_process.number)
-        input_process.number = ""
+        # Le nombre entrer est complet nous pouvont donc le convertir en int ou en float si le int retourne une erreur a cause de la virgule
+        n=0
+        if input_process.number != "":
+            insert_number()
+            sign.set("")
+            current_number.set(input_process.number)
+            input_process.number = ""
+            n=1
 
+        if (enter == "+" or enter == "-" or enter == "X" or enter == "/" or enter != "√") \
+                and not isinstance(input_process.storage[-1], str):
+            current_number.set("")
+        else:
+            if n==0 and enter == "√" and input_process.number=="":
+                print(input_process.number)
+                input_process.expression = input_process.expression+"√"
+                current_number.set("√")
+            else: return 0
+        if input_process.number != "":
+            insert_number()
+            sign.set("")
+            current_number.set(input_process.number)
+            input_process.number = ""
+            n=1
         input_process.storage.append(enter)
+        print(input_process.storage)
 
 
-
-
-#Déclaration de notre cadre parent permettant l'affichage des cadres enfants
+# Déclaration de notre cadre parent permettant l'affichage des cadres enfants
 calc = Tk()
 calc.title("Calculatrice")
 calc.resizable(False, False)
@@ -178,18 +208,18 @@ display.rowconfigure(0, weight=1)
 
 # Affichage des boutons
 boutons = ttk.Frame(calc, padding="1 1 1 1")
-boutons.grid(column=0, row=1, sticky=(W, E, S))
+boutons.grid(column=0, row=1, sticky=("W","E", "S"))
 boutons.columnconfigure(0, weight=1)
 boutons.rowconfigure(0, weight=1)
-#Déclaration de variable utile a l'affichage
+# Déclaration de variable utile a l'affichage
 value = StringVar()
 sign = StringVar()
 current_number = StringVar()
-#Déclaration de zones de texte pour l'affichage
+# Déclaration de zones de texte pour l'affichage
 ttk.Label(display, textvariable=sign).grid(column=0, row=1)
-ttk.Label(display, textvariable=value,font=12).grid(column=0, row=0)
+ttk.Label(display, textvariable=value, font=12).grid(column=0, row=0)
 ttk.Label(display, textvariable=current_number).grid(column=1, row=1)
-#Déclaration des boutons
+# Déclaration des boutons
 ttk.Button(boutons, text="7", command=lambda: input_process(7)).grid(column=0, row=0)
 ttk.Button(boutons, text="8", command=lambda: input_process(8)).grid(column=1, row=0)
 ttk.Button(boutons, text="9", command=lambda: input_process(9)).grid(column=2, row=0)
@@ -208,6 +238,7 @@ ttk.Button(boutons, text=",", command=lambda: input_process(",")).grid(column=2,
 ttk.Button(boutons, text="+", command=lambda: input_process("+")).grid(column=3, row=3)
 ttk.Button(boutons, text="=", command=lambda: input_process("=")).grid(column=4, row=4)
 ttk.Button(boutons, text="CE", command=lambda: input_process("CE")).grid(column=4, row=0)
-
+ttk.Button(boutons, text="√", command=lambda: input_process("√")).grid(column=4, row=1)
+ttk.Button(boutons, text="%", command=lambda: input_process("%")).grid(column=4, row=3)
 
 calc.mainloop()
