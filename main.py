@@ -150,7 +150,6 @@ def input_process(enter):
             input_process.expression = ""
             input_process.number = result
             input_process.storage = []
-            print(input_process.storage)
             input_process.number = str(input_process.number)
 
     # Si l'entrée est "CE"
@@ -183,7 +182,6 @@ def input_process(enter):
             current_number.set("")
         else:
             if n==0 and enter == "√" and input_process.number=="":
-                print(input_process.number)
                 input_process.expression = input_process.expression+"√"
                 current_number.set("√")
             else: return 0
@@ -194,7 +192,6 @@ def input_process(enter):
             input_process.number = ""
             n=1
         input_process.storage.append(enter)
-        print(input_process.storage)
 
 
 # Déclaration de notre cadre parent permettant l'affichage des cadres enfants
